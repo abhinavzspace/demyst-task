@@ -1,0 +1,126 @@
+openapi: "3.0.0"
+info:
+  version: "1.0.0"
+  title: "Demyst Task"
+  description: Simple business loan application system
+
+paths:
+  /balanceSheet:
+    parameters:
+      - name: businessName
+        description: Name of the business
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/BusinessName"
+      - name: yearEstablished
+        description: Year the business was established in
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/YearEstablished"
+      - name: loan
+        description: Loan amount
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/LoanAmount"
+      - name: accountingProviderId
+        description: ID of Accounting provider
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/AccountingProviderId"
+    get:
+      summary: Get details for review
+      responses:
+        "200":
+          description: Details corresponding to the business
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DetailsForReview"
+        404:
+          description: Details not found for this business
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /outcome/{tempBusinessId}:
+    parameters:
+      - name: tempBusinessId
+        description: temporary id which points to the cached saved data
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/TempBusinessId"
+    get:
+      summary: Get the final outcome
+      responses:
+        "200":
+          description: final outcome
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Outcome"
+        404:
+          description: final outcome not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    BusinessName:
+      description: Name of a unique business
+      type: string
+    YearEstablished:
+      description: Year the business was established in
+      type: string
+    LoanAmount:
+      description: Loan Amount
+      type: integer
+      minimum: 0
+    AccountingProviderId:
+      description: ID of Accounting provider
+      type: string
+    DetailsForReview:
+      type: object
+      required:
+        - tempBusinessId
+        - businessName
+        - yearEstablished
+        - profitOrLossByYear
+      properties:
+        tempBusinessId:
+          $ref: "#/components/schemas/TempBusinessId"
+        businessName:
+          $ref: "#/components/schemas/BusinessName"
+        yearEstablished:
+          $ref: "#/components/schemas/YearEstablished"
+        profitOrLossByYear:
+          type: integer
+        averageAssetValue:
+          type: integer
+    TempBusinessId:
+      type: string
+    Error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          description: A human readable error message
+          type: string
