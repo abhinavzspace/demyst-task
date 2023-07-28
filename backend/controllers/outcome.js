@@ -4,12 +4,13 @@ import {
 	FieldRequiredError,
 	NotFoundError,
 } from "../helper/customErrors.js";
-import { tempBusinessDataRepository } from "../cache/tempBusinessData.js";
+import client from "../cache/client.js";
 
 const decisionEngineUrl = process.env.DECISION_ENGINE_URL;
 
 export const outcome = async (req, res, next) => {
 	try {
+		const dataString = await client.get(req.params.tempBusinessId);
 		const {
 			businessName,
 			yearEstablished,
@@ -17,12 +18,12 @@ export const outcome = async (req, res, next) => {
 			// accountingProviderId,
 			profitOrLossByYear,
 			averageAssetValue,
-		} = await tempBusinessDataRepository.fetch(req.params.tempBusinessId);
+		} = JSON.parse(dataString);
 
 		if (!businessName || businessName.length < 0)
 			throw new NotFoundError("Business Name");
 
-		await tempBusinessDataRepository.remove(req.params.tempBusinessId);
+		await client.del(req.params.tempBusinessId);
 
 		let preAssessment = 20; // default value
 

@@ -1,4 +1,3 @@
-import { Schema, Repository } from "redis-om";
 import client from "./client.js";
 
 /* create a Schema */
