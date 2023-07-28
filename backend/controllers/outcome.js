@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
 	AlreadyTakenError,
 	FieldRequiredError,
@@ -18,6 +19,9 @@ export const outcome = async (req, res, next) => {
 			averageAssetValue,
 		} = await tempBusinessDataRepository.fetch(req.params.tempBusinessId);
 
+		if (!businessName || businessName.length < 0)
+			throw new NotFoundError("Business Name");
+
 		await tempBusinessDataRepository.remove(req.params.tempBusinessId);
 
 		let preAssessment = 20; // default value
@@ -25,12 +29,12 @@ export const outcome = async (req, res, next) => {
 		if (profitOrLossByYear > 0) preAssessment = 60;
 		if (averageAssetValue > loan) preAssessment = 100;
 
-		const result = await axios.get(
+		const { data } = await axios.get(
 			`${decisionEngineUrl}/decide?businessName=${businessName}&yearEstablished=${yearEstablished}&profitOrLossByYear=${profitOrLossByYear}&preAssessment=${preAssessment}`
 		);
-		if (!result) throw new NotFoundError("result");
+		if (!data) throw new NotFoundError("data");
 
-		res.json({ result });
+		res.json({ result: data });
 	} catch (error) {
 		next(error);
 	}

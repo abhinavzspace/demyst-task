@@ -7,10 +7,10 @@ import YAML from "yamljs";
 import morgan from "morgan";
 import errorHandler from "./middleware/errorHandler.js";
 
-import balanceSheetRoutes from "./routes/balanceSheet.js";
+import decideRoutes from "./routes/decide.js";
 
 const env = process.env.NODE_ENV || "development";
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 4002;
 
 const app = express();
 app.use(cors());
@@ -27,7 +27,7 @@ if (process.env.NODE_ENV === "production") {
 const swaggerDocument = YAML.load("api.yaml");
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use("/api/balanceSheet", balanceSheetRoutes);
+app.use("/api/decide", decideRoutes);
 app.get("*", (req, res) =>
 	res.status(404).json({ errors: { body: ["Not found"] } })
 );

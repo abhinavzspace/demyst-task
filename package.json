@@ -4,11 +4,18 @@
 	"description": "",
 	"workspaces": [
 		"backend",
-		"frontend"
+		"frontend",
+		"accounting-provider",
+		"decision-engine"
 	],
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"dev": "concurrently --names 'frontend,backend,accounting,decision' -c 'yellow,green,blue,cyan' 'npm run dev -w frontend' 'npm run dev -w backend' 'npm run dev -w accounting-provider' 'npm run dev -w decision-engine'",
+		"start": "npm run build -w frontend && npm run start -w backend && npm run start -w accounting-provider && npm run start -w decision-engine"
 	},
 	"author": "abhinav",
-	"license": "ISC"
+	"license": "ISC",
+	"devDependencies": {
+		"concurrently": "^8.2.0"
+	}
 }

@@ -1,11 +1,11 @@
 openapi: "3.0.0"
 info:
   version: "1.0.0"
-  title: "Demyst-Task accounting provider"
-  description: accounting provider
+  title: "Demyst-Task decision engine"
+  description: decision engine
 
 paths:
-  /balanceSheet:
+  /api/decide:
     parameters:
       - name: businessName
         description: Name of the business
@@ -19,15 +19,27 @@ paths:
         required: true
         schema:
           $ref: "#/components/schemas/YearEstablished"
+      - name: profitOrLossByYear
+        description: Profit or loss by year
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/ProfitOrLossByYear"
+      - name: preAssessment
+        description: Pre-assessment of the business
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/PreAssessment"
     get:
-      summary: get balance sheet
+      summary: get the final result
       responses:
         "200":
-          description: Balance sheet of the business
+          description: Final result
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BalanceSheet"
+                $ref: "#/components/schemas/Result"
         404:
           description: Balance sheet not found for this business
           content:
@@ -48,24 +60,18 @@ components:
     YearEstablished:
       description: Year the business was established in
       type: string
-    BalanceSheet:
-      type: array
-      items:
-        type: object
-        properties:
-          year:
-            type: integer
-            minimum: 1500
-            maximum: 3000
-          month:
-            type: integer
-            minimum: 1
-            maximum: 12
-          profitOrLoss:
-            type: integer
-          assetsValue:
-            type: integer
-            minimum: 0
+    ProfitOrLossByYear:
+      description: Profit or loss by year
+      type: integer
+    PreAssessment:
+      description: Pre-assessment of the business
+      type: integer
+      minimum: 20
+      maximum: 100
+      default: 20
+    Result:
+      description: final result
+      type: integer
     Error:
       type: object
       required:

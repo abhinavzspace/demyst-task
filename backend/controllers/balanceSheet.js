@@ -1,4 +1,5 @@
 import { EntityId } from "redis-om";
+import axios from "axios";
 import {
 	AlreadyTakenError,
 	FieldRequiredError,
@@ -13,31 +14,36 @@ export const balanceSheet = async (req, res, next) => {
 		const { businessName, yearEstablished, loan, accountingProviderId } =
 			req.query;
 
-		let bs = await axios.get(
+		const {
+			data: { sheet },
+		} = await axios.get(
 			`${accountingProviderUrl}/balanceSheet?businessName=${businessName}&yearEstablished=${yearEstablished}`
 		);
-		if (!bs) throw new NotFoundError("Balance sheet");
 
-		bs.sort((a, b) => b.year - a.year); //sort by year in descending order
-		bs.sort((a, b) => b.month - a.month); // further sort by month in descending order
+		if (!sheet) throw new NotFoundError("Balance sheet");
 
-		const profitOrLossByYear = bs.reduce(
+		sheet.sort((a, b) => b.year - a.year); //sort by year in descending order
+		sheet.sort((a, b) => b.month - a.month); // further sort by month in descending order
+
+		const profitOrLossByYear = sheet.reduce(
 			(accumulator, current, i) =>
 				i < 12 ? accumulator + current.profitOrLoss : accumulator,
 			0
 		);
 
 		const averageAssetValue =
-			bs.reduce((acc, curr, i) => (i < 12 ? acc + curr.assetsValue : acc), 0) /
-			bs.length;
+			sheet.reduce(
+				(acc, curr, i) => (i < 12 ? acc + curr.assetsValue : acc),
+				0
+			) / sheet.length;
 
 		const tempBusiness = await tempBusinessDataRepository.save({
 			businessName,
-			yearEstablished,
-			loan,
+			yearEstablished: parseInt(yearEstablished),
+			loan: parseInt(loan),
 			accountingProviderId,
-			profitOrLossByYear,
-			averageAssetValue,
+			profitOrLossByYear: parseInt(profitOrLossByYear),
+			averageAssetValue: parseInt(averageAssetValue),
 		});
 
 		if (!tempBusiness[EntityId]) throw new NotFoundError("Entity Id");
@@ -49,7 +55,7 @@ export const balanceSheet = async (req, res, next) => {
 		);
 
 		res.json({
-			tempBusinessId: tempBusiness.entityId,
+			tempBusinessId: tempBusiness[EntityId],
 			businessName,
 			yearEstablished,
 			profitOrLossByYear,

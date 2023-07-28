@@ -5,7 +5,7 @@ info:
   description: Simple business loan application system
 
 paths:
-  /balanceSheet:
+  /api/balanceSheet:
     parameters:
       - name: businessName
         description: Name of the business
@@ -52,7 +52,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /outcome/{tempBusinessId}:
+  /api/outcome/{tempBusinessId}:
     parameters:
       - name: tempBusinessId
         description: temporary id which points to the cached saved data
@@ -88,7 +88,7 @@ components:
       type: string
     YearEstablished:
       description: Year the business was established in
-      type: string
+      type: integer
     LoanAmount:
       description: Loan Amount
       type: integer
