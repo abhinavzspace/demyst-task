@@ -116,6 +116,9 @@ components:
           type: integer
     TempBusinessId:
       type: string
+    Outcome:
+      description: final outcome
+      type: integer
     Error:
       type: object
       required:

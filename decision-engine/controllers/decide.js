@@ -9,7 +9,7 @@ export const decide = async (req, res, next) => {
 		const { businessName, yearEstablished, profitOrLossByYear, preAssessment } =
 			req.query;
 
-		res.json({ preAssessment });
+		res.json({ assesment: preAssessment });
 	} catch (error) {
 		next(error);
 	}
