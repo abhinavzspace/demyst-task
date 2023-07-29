@@ -21,7 +21,8 @@ For API, checkout api.yaml.
 1. Install Docker and git
 2. Run `git clone https://github.com/abhinavzspace/demyst-task.git`
 3. `cd demyst-task`
-4. Run `docker compose up`
+4. Create `.env` for frontend by running `cp ./frontend/sample.env ./frontend/.env`. (#TODO: Need to remove this step)
+5. Run `docker compose up`
 
 ## Running manually
 
