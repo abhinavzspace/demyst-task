@@ -13,7 +13,6 @@ services:
       - REDIS_URL=redis://default:secure_pass@redis:6379/0
       - ACCOUNTING_PROVIDER_URL=http://accounting-provider:4001/api
       - DECISION_ENGINE_URL=http://decision-engine:4002/api
-      - NODE_ENV=development
     ports:
       - "4000:4000"
     volumes:
@@ -38,8 +37,6 @@ services:
     build:
       context: ./accounting-provider
     command: npm run dev
-    environment:
-      - NODE_ENV=development
     ports:
       - "4001:4001"
     volumes:
@@ -50,8 +47,6 @@ services:
     build:
       context: ./decision-engine
     command: npm run dev
-    environment:
-      - NODE_ENV=development
     ports:
       - "4002:4002"
     volumes:
@@ -63,6 +58,8 @@ services:
       context: ./frontend
     ports:
       - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_SERVER_URL=http://backend:4000/api
     networks:
       - app-tier
     depends_on:
