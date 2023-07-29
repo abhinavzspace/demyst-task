@@ -204,6 +204,10 @@ export default function Home() {
 											? outputs.profitOrLossByYear
 											: ""}
 									</span>
+									<p className="text-red text-xs italic text-blue-700">
+										This value is calculated from balance sheet (with random
+										data) provided by accounting provider.
+									</p>
 								</div>
 							</div>
 							<div className="-mx-3 mb-6">
@@ -219,6 +223,10 @@ export default function Home() {
 											? outputs.averageAssetValue
 											: ""}
 									</span>
+									<p className="text-red text-xs italic text-blue-700">
+										This value is calculated from balance sheet (with random
+										data) provided by accounting provider.
+									</p>
 								</div>
 							</div>
 							<div className="-mx-3 md:flex mb-2">
