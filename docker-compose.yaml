@@ -9,7 +9,6 @@ services:
     build:
       context: ./backend
     command: npm run dev
-    env_file: ./backend/.env
     environment:
       - REDIS_URL=redis://default:secure_pass@redis:6379/0
       - ACCOUNTING_PROVIDER_URL=http://accounting-provider:4001/api
