@@ -49,3 +49,7 @@ For API, checkout api.yaml.
 - frontend - `/frontend/app/page.tsx`
 - backend - `/backend/controllers/*`
 - accounting-provider - `/backend/controllers/balanceSheet.js`
+
+### TODO
+
+- backend and frontend form validations
